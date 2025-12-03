@@ -105,7 +105,13 @@ export default function ExpenseForm({ onSubmit, onCancel, initial }) {
             </span>
           )}
         </div>
-        <Button type="button" className="border bg-white text-gray-800 dark:bg-gray-700 dark:text-white" onClick={onCancel}>Cancel</Button>
+        <Button
+          type="button"
+          className="border border-gray-300 bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-white dark:border-gray-600"
+          onClick={onCancel}
+        >
+          Cancel
+        </Button>
         <Button type="submit" className="bg-green-600 hover:bg-green-700">Save</Button>
       </div>
     </form>

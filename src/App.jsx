@@ -28,9 +28,9 @@ export default function App(){
       setError(null)
         try {
           const data = await fetchExpenses()
-          setExpenses(data)
+          setExpenses(Array.isArray(data) ? data : [])
         } catch (e) {
-        
+          setExpenses([])
         }
 
       setLoading(false)
