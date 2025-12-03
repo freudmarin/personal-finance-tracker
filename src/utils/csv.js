@@ -1,8 +1,9 @@
 // CSV helpers for export (and import if needed)
 export function toCSV(items) {
   const headers = ['id', 'title', 'amount', 'date']
-  const rows = items.map(e => {
-    const id = e.id ?? ''
+  const rows = items.map((e, i) => {
+    // Use sequential ID for export
+    const id = i + 1
     const title = String(e.title || '').replace(/"/g, '""')
     const amount = e.amount ?? ''
     let dateStr = ''
