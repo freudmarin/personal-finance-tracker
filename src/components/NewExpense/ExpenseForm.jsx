@@ -1,18 +1,28 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Input from '../UI/Input'
 import Button from '../UI/Button'
+import { fetchCategories } from '../../utils/api'
 
 export default function ExpenseForm({ onSubmit, onCancel, initial }) {
   const [title, setTitle] = useState(initial?.title || '')
   const [amount, setAmount] = useState(initial?.amount ?? '')
   const [date, setDate] = useState(initial?.date || '')
+  const [categoryId, setCategoryId] = useState(initial?.categoryId || '')
+  const [tags, setTags] = useState(Array.isArray(initial?.tags) ? initial.tags.join(', ') : '')
+  const [categories, setCategories] = useState([])
   const [errors, setErrors] = useState({})
+
+  useEffect(() => {
+    fetchCategories().then(setCategories).catch(() => setCategories([]))
+  }, [])
 
   function validate() {
     const newErrors = {}
     if (!title.trim()) newErrors.title = 'Title is required.'
     if (!amount || isNaN(amount) || Number(amount) <= 0) newErrors.amount = 'Amount must be a positive number.'
     if (!date) newErrors.date = 'Date is required.'
+    if (!categoryId) newErrors.categoryId = 'Category is required.'
+    // tags are optional
     return newErrors
   }
 
@@ -54,7 +64,8 @@ export default function ExpenseForm({ onSubmit, onCancel, initial }) {
     const newErrors = validate()
     setErrors(newErrors)
     if (Object.keys(newErrors).length > 0) return
-    onSubmit({ title: title.trim(), amount: Number(amount), date })
+    const tagsList = tags.split(',').map(t => t.trim()).filter(Boolean)
+    onSubmit({ title: title.trim(), amount: Number(amount), date, categoryId, tags: tagsList })
   }
 
   return (
@@ -89,6 +100,30 @@ export default function ExpenseForm({ onSubmit, onCancel, initial }) {
             </span>
           )}
         </div>
+      </div>
+      <div className="flex flex-col gap-2 mt-2">
+        <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Category</label>
+        <select
+          value={categoryId}
+          onChange={e => setCategoryId(e.target.value)}
+          className={`border p-2 rounded ${errors.categoryId ? 'border-red-500' : 'border-gray-300'}`}
+        >
+          <option value="">Select category</option>
+          {categories.map(cat => (
+            <option key={cat.id} value={cat.id}>{cat.name}</option>
+          ))}
+        </select>
+        {errors.categoryId && (
+          <span className="block mt-1 text-xs text-red-600">{errors.categoryId}</span>
+        )}
+      </div>
+      <div className="flex flex-col gap-2 mt-2">
+        <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Tags (comma separated)</label>
+        <Input
+          placeholder="e.g. groceries, food, work"
+          value={tags}
+          onChange={e => setTags(e.target.value)}
+        />
       </div>
       <div className="flex gap-4 items-end mt-2">
         <div className="flex-1 flex flex-col gap-2">

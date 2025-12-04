@@ -1,7 +1,7 @@
 import React from 'react'
 import ExpenseItem from './ExpenseItem'
 
-export default function ExpensesList({ items, onDelete, onUpdate }){
+export default function ExpensesList({ categories, items, onDelete, onUpdate }){
   return (
     <div className="space-y-3">
       {items.map(item => (

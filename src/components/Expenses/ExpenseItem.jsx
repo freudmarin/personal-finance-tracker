@@ -26,6 +26,14 @@ export default function ExpenseItem({ item, onDelete, onUpdate }) {
               <p className="text-sm text-gray-500 dark:text-gray-300">{item.date}</p>
             </div>
             <p className="text-indigo-600 dark:text-indigo-300 font-medium mt-1">${Number(item.amount).toFixed(2)}</p>
+            {Array.isArray(item.tags) && item.tags.length > 0 && (
+              <div className="mt-2 text-sm text-gray-600 dark:text-gray-300 flex flex-wrap gap-2">
+                {item.tags.map((tag, idx) => (
+                  <span key={idx} className="bg-gray-200 dark:bg-gray-700 px-2 py-0.5 rounded">#{tag}</span>
+                ))}
+              </div>
+            )}
+          <p className="text-lg font-semibold text-gray-700 dark:text-gray-100">{item.category.name}</p>
           </div>
         )}
       </div>
