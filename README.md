@@ -1,5 +1,5 @@
 
-# Expense Tracker
+# Personal Finance Tracker
 
 A modern finance tracker app built with React, Tailwind CSS, Vite, and a Java/Spring Boot backend.
 
