@@ -31,7 +31,17 @@ export async function addCategory(category) {
     headers: withClientId({ 'Content-Type': 'application/json' }),
     body: JSON.stringify(category),
   });
-  if (!res.ok) throw new Error('Failed to add category');
+  if (!res.ok) {
+    if (res.status === 409) {
+      throw new Error('Category already exists (409)');
+    }
+    let msg = 'Failed to add category';
+    try {
+      const data = await res.json();
+      if (data && data.message) msg = data.message;
+    } catch {}
+    throw new Error(msg);
+  }
   return res.json();
 }
 
@@ -41,7 +51,17 @@ export async function updateCategory(id, category) {
     headers: withClientId({ 'Content-Type': 'application/json' }),
     body: JSON.stringify(category),
   });
-  if (!res.ok) throw new Error('Failed to update category');
+  if (!res.ok) {
+    if (res.status === 409) {
+      throw new Error('Category already exists (409)');
+    }
+    let msg = 'Failed to add category';
+    try {
+      const data = await res.json();
+      if (data && data.message) msg = data.message;
+    } catch {}
+    throw new Error(msg);
+  }
   return res.json();
 }
 

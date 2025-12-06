@@ -4,7 +4,7 @@ import Transactions from './components/Transactions/Transactions.jsx'
 import MonthChart from './components/Transactions/MonthChart.jsx'
 import Header from './components/Header.jsx'
 import useDarkMode from './hooks/useDarkMode.js'
-import NewTransaction from './components/Transaction/NewTransaction.jsx'
+//import NewTransaction from './components/Transaction/NewTransaction.jsx'
 import CategoriesPage from './components/Categories/CategoriesPage.jsx'
 import { fetchTransactions, addTransaction as apiAddTransaction, updateTransaction as apiUpdateTransaction, deleteTransaction as apiDeleteTransaction, fetchCategories } from './utils/api'
 
@@ -78,15 +78,10 @@ export default function App(){
       <div className="min-h-screen bg-gradient-to-b from-gray-100 to-gray-50 dark:from-gray-900 dark:to-gray-800 p-6">
         <div className="max-w-3xl mx-auto">
           <Header isDark={isDark} toggleDark={() => setIsDark(d => !d)} />
-          <nav className="mb-6 flex gap-4">
-            <Link to="/" className="text-blue-600 hover:underline">Income & Expenses</Link>
-            <Link to="/categories" className="text-blue-600 hover:underline">Categories</Link>
-          </nav>
           <Routes>
             <Route path="/categories" element={<CategoriesPage reloadExpenses={reloadTransactions} reloadCategories={reloadCategories} categories={categories} catError={catError} />} />
             <Route path="/" element={
               <>
-                <NewTransaction onAdd={addTransaction} />
                 <div className="flex gap-6 mb-4">
                   <div className="text-green-700 dark:text-green-400 font-semibold">Total Income: ${totalIncome.toFixed(2)}</div>
                   <div className="text-red-700 dark:text-red-400 font-semibold">Total Expense: ${totalExpense.toFixed(2)}</div>
@@ -110,6 +105,7 @@ export default function App(){
                     items={transactions}
                     onDelete={deleteTransaction}
                     onUpdate={updateTransaction}
+                    onAdd={addTransaction}
                     categories={categories}
                     typeFilter={typeFilter}
                     setTypeFilter={setTypeFilter}
