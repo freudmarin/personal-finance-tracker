@@ -88,7 +88,7 @@ export default function TransactionForm({ onSubmit, onCancel, initial }) {
 						placeholder="Title"
 						value={title}
 						onChange={handleTitleChange}
-						className={`border p-3 text-base rounded-lg w-full min-w-[200px] max-w-[400px] ${errors.title ? 'border-red-500' : 'border-gray-300'}`}
+						className={`border p-3 text-base rounded-lg w-full min-w-[200px] max-w-[400px] bg-white dark:bg-white text-gray-900 focus:outline-none ${errors.title ? 'border-red-500' : 'border-gray-300'}`}
 					/>
 					{errors.title && (
 						<span className="block mt-1 text-xs text-red-600">
@@ -101,7 +101,7 @@ export default function TransactionForm({ onSubmit, onCancel, initial }) {
 					<select
 						value={type}
 						onChange={e => setType(e.target.value)}
-						className={`border p-3 text-base rounded-lg w-full min-w-[200px] max-w-[400px] ${errors.type ? 'border-red-500' : 'border-gray-300'}`}
+						className={`border p-3 text-base rounded-lg w-full min-w-[200px] max-w-[400px] bg-white dark:bg-white text-gray-900 focus:outline-none ${errors.type ? 'border-red-500' : 'border-gray-300 dark:border-gray-700'}`}
 					>
 						<option value="expense">Expense</option>
 						<option value="income">Income</option>
@@ -119,7 +119,7 @@ export default function TransactionForm({ onSubmit, onCancel, initial }) {
 						onChange={handleAmountChange}
 						min="0"
 						step="0.01"
-						className={`border p-3 text-base rounded-lg w-full min-w-[200px] max-w-[400px] ${errors.amount ? 'border-red-500' : 'border-gray-300'}`}
+						className={`border p-3 text-base rounded-lg w-full min-w-[200px] max-w-[400px] bg-white dark:bg-white text-gray-900 focus:outline-none ${errors.amount ? 'border-red-500' : 'border-gray-300'}`}
 					/>
 					{errors.amount && (
 						<span className="block mt-1 text-xs text-red-600">
@@ -141,7 +141,7 @@ export default function TransactionForm({ onSubmit, onCancel, initial }) {
 								return newErrors;
 							});
 						}}
-						className={`border p-3 text-base rounded-lg w-full min-w-[200px] max-w-[400px] ${errors.categoryId ? 'border-red-500' : 'border-gray-300'}`}
+						className={`border p-3 text-base rounded-lg w-full min-w-[200px] max-w-[400px] bg-white dark:bg-white text-gray-900 focus:outline-none ${errors.categoryId ? 'border-red-500' : 'border-gray-300 dark:border-gray-700'}`}
 					>
 						<option value="">Select category</option>
 						{categories.map(cat => (
@@ -158,7 +158,7 @@ export default function TransactionForm({ onSubmit, onCancel, initial }) {
 						placeholder="e.g. groceries, food, work"
 						value={tags}
 						onChange={e => setTags(e.target.value)}
-						className={`border p-3 text-base rounded-lg w-full min-w-[200px] max-w-[400px] ${errors.tags ? 'border-red-500' : 'border-gray-300'}`}
+						className={`border p-3 text-base rounded-lg w-full min-w-[200px] max-w-[400px] bg-white dark:bg-white text-gray-900 focus:outline-none ${errors.tags ? 'border-red-500' : 'border-gray-300'}`}
 					/>
 				</div>
 				<div className="flex flex-col gap-1">
@@ -167,7 +167,7 @@ export default function TransactionForm({ onSubmit, onCancel, initial }) {
 						type="date"
 						value={date}
 						onChange={handleDateChange}
-						className={`border p-3 text-base rounded-lg w-full min-w-[200px] max-w-[400px] ${errors.date ? 'border-red-500' : 'border-gray-300'}`}
+						className={`border p-3 text-base rounded-lg w-full min-w-[200px] max-w-[400px] bg-white dark:bg-white text-gray-900 focus:outline-none ${errors.date ? 'border-red-500' : 'border-gray-300'}`}
 						placeholder="mm/dd/yyyy"
 					/>
 					{errors.date && (

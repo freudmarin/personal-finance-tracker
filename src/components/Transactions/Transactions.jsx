@@ -46,21 +46,23 @@ export default function Transactions({ items, onDelete, onUpdate, onAdd, categor
   }
 
   return (
-    <Card className="mt-4">
-      <div className="sticky top-0 z-10 bg-white dark:bg-gray-800 rounded-t-2xl p-4 mb-4 shadow">
-        <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-6">Income & Expenses</h2>
-        <div className="mb-6 flex flex-col sm:flex-row gap-3 items-center">
-          <div className="flex gap-3 w-full sm:w-auto">
+    <Card className="mt-4 sm:mt-6">
+      <div className="sticky top-0 z-10 bg-white dark:bg-gray-800 rounded-t-xl sm:rounded-t-2xl p-4 sm:p-6 mb-4 shadow-md border-b border-gray-200 dark:border-gray-700">
+        <h2 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-white mb-4 sm:mb-6">Transactions</h2>
+        <div className="mb-4 sm:mb-6 flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">
+          <div className="grid grid-cols-2 sm:flex gap-2 sm:gap-3 w-full sm:w-auto">
             <button
               onClick={handleAdd}
-              className="flex items-center gap-2 bg-gradient-to-r from-green-500 to-emerald-600 text-white px-6 py-3 rounded-2xl shadow-lg hover:from-green-600 hover:to-emerald-700 transition font-semibold text-base"
+              className="flex items-center justify-center gap-2 bg-gradient-to-r from-green-500 to-emerald-600 text-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl shadow-md hover:from-green-600 hover:to-emerald-700 hover:shadow-lg transition-all font-semibold text-sm sm:text-base"
             >
               <svg xmlns='http://www.w3.org/2000/svg' className='h-5 w-5' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M12 4v16m8-8H4' /></svg>
-              New Entry
+              <span className="hidden sm:inline">New Entry</span>
+              <span className="sm:hidden">New</span>
             </button>
-            <button onClick={exportCSV} className="flex items-center gap-2 bg-gradient-to-r from-indigo-500 to-indigo-700 text-white px-6 py-3 rounded-2xl shadow-lg hover:from-indigo-600 hover:to-indigo-800 transition font-semibold text-base">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 16v-8m0 8l-4-4m4 4l4-4" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 20h16" /></svg>
-              Export CSV
+            <button onClick={exportCSV} className="flex items-center justify-center gap-2 bg-gradient-to-r from-indigo-500 to-purple-600 text-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl shadow-md hover:from-indigo-600 hover:to-purple-700 hover:shadow-lg transition-all font-semibold text-sm sm:text-base">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+              <span className="hidden sm:inline">Export</span>
+              <span className="sm:hidden">CSV</span>
             </button>
           </div>
         </div>
@@ -69,23 +71,21 @@ export default function Transactions({ items, onDelete, onUpdate, onAdd, categor
           <select
             value={yearFilter}
             onChange={e => setYearFilter(e.target.value)}
-            className="p-2 border border-gray-300 dark:border-gray-700 rounded-full bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 focus:border-gray-400 dark:focus:border-gray-500 focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-600 min-w-[120px] font-medium text-base transition"
-            style={{ WebkitAppearance: 'none', MozAppearance: 'none', appearance: 'none' }}
+            className="px-3 py-2 text-sm sm:text-base border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 focus:border-green-500 dark:focus:border-green-500 focus:ring-2 focus:ring-green-200 dark:focus:ring-green-800 min-w-[100px] sm:min-w-[120px] font-medium transition shadow-sm"
           >
             {years.map(y => (
-              <option key={y} value={y} className="font-medium text-base text-gray-700 dark:text-gray-200">{y}</option>
+              <option key={y} value={y}>{y}</option>
             ))}
           </select>
           {/* Category filter */}
           <select
             value={categoryFilter}
             onChange={e => setCategoryFilter(e.target.value)}
-            className="p-2 border border-gray-300 dark:border-gray-700 rounded-full bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 focus:border-gray-400 dark:focus:border-gray-500 focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-600 min-w-[160px] font-medium text-base transition"
-            style={{ WebkitAppearance: 'none', MozAppearance: 'none', appearance: 'none' }}
+            className="px-3 py-2 text-sm sm:text-base border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 focus:border-green-500 dark:focus:border-green-500 focus:ring-2 focus:ring-green-200 dark:focus:ring-green-800 min-w-[120px] sm:min-w-[160px] font-medium transition shadow-sm"
           >
-            <option value="All" className="font-medium text-base text-gray-700 dark:text-gray-200">All Categories</option>
+            <option value="All">All Categories</option>
             {(Array.isArray(categories) ? categories : []).map(cat => (
-              <option key={cat.id} value={cat.id} className="font-medium text-base text-gray-700 dark:text-gray-200">{cat.name}</option>
+              <option key={cat.id} value={cat.id}>{cat.name}</option>
             ))}
           </select>
           {/* Type filter */}
@@ -94,13 +94,13 @@ export default function Transactions({ items, onDelete, onUpdate, onAdd, categor
               <button
                 key={type}
                 onClick={() => setTypeFilter(type)}
-                className={`px-4 py-2 rounded-full font-medium border transition focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-600 focus:border-gray-900 dark:focus:border-gray-100 ${typeFilter === type
+                className={`px-3 sm:px-4 py-2 text-sm sm:text-base rounded-lg font-semibold border-2 transition-all shadow-sm ${typeFilter === type
                   ? (type === 'income'
-                      ? 'bg-green-600 text-white border-gray-900 shadow'
+                      ? 'bg-green-600 text-white border-green-700 shadow-md scale-105'
                       : type === 'expense'
-                        ? 'bg-red-600 text-white border-gray-900 shadow'
-                        : 'bg-blue-600 text-white border-gray-900 shadow dark:border-gray-100')
-                  : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800'}`}
+                        ? 'bg-red-600 text-white border-red-700 shadow-md scale-105'
+                        : 'bg-blue-600 text-white border-blue-700 shadow-md scale-105')
+                  : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 hover:border-gray-400 dark:hover:border-gray-500'}`}
               >
                 {type.charAt(0).toUpperCase() + type.slice(1)}
               </button>
@@ -110,35 +110,53 @@ export default function Transactions({ items, onDelete, onUpdate, onAdd, categor
       </div>
 
       {filtered.length === 0 ? (
-        <p className="text-gray-500 dark:text-gray-300 text-center py-8">No records. Add your first entry.</p>
+        <div className="flex flex-col items-center justify-center py-12 sm:py-16 text-center">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 sm:h-20 sm:w-20 text-gray-300 dark:text-gray-600 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" /></svg>
+          <p className="text-gray-500 dark:text-gray-400 text-base sm:text-lg font-medium">No transactions found.</p>
+          <p className="text-gray-400 dark:text-gray-500 text-sm mt-1">Add your first entry to get started!</p>
+        </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
           {filtered.map(item => (
             <div
               key={item.id}
-              className="bg-gradient-to-br from-white via-green-50 to-emerald-50 dark:from-gray-900 dark:via-gray-800 dark:to-emerald-900 rounded-3xl shadow-lg p-6 flex flex-col border border-gray-100 dark:border-gray-800 hover:shadow-2xl transition-all duration-200 group"
+              className="bg-white dark:bg-gradient-to-br dark:from-gray-800 dark:to-gray-850 rounded-xl shadow-lg hover:shadow-2xl p-5 sm:p-6 flex flex-col border border-gray-200 dark:border-gray-700 hover:border-green-300 dark:hover:border-green-700 transition-all duration-300 group backdrop-blur-sm"
             >
-              <div className="flex justify-between items-center mb-2">
-                <span className="font-semibold text-lg text-gray-800 dark:text-gray-100 group-hover:text-green-600 transition">{item.title}</span>
-                <span className={`px-2 py-1 rounded text-xs font-bold ${item.type === 'income' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>{item.type.charAt(0).toUpperCase() + item.type.slice(1)}</span>
+              <div className="flex justify-between items-start mb-3">
+                <span className="font-bold text-lg sm:text-xl text-gray-800 dark:text-white group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors">{item.title}</span>
+                <span className={`px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wide shadow-sm ${item.type === 'income' ? 'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-400 dark:border dark:border-green-600' : 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-400 dark:border dark:border-red-600'}`}>{item.type}</span>
               </div>
-              <div className="text-gray-500 dark:text-gray-400 text-sm mb-1">{item.date}</div>
-              <div className="flex gap-2 flex-wrap mb-1">
-                {Array.isArray(item.tags) && item.tags.map(tag => (
-                  <span key={tag} className="bg-gray-200 dark:bg-gray-700 rounded px-2 py-0.5 text-xs">#{tag}</span>
-                ))}
+              <div className="text-gray-500 dark:text-gray-400 text-sm mb-3 flex items-center gap-1.5">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                {item.date}
               </div>
-              <div className="font-bold text-xl text-gray-900 dark:text-white">${Number(item.amount).toLocaleString(undefined, { minimumFractionDigits: 2 })}</div>
-              <div className="text-sm text-gray-600 dark:text-gray-300 mb-2">{item.category?.name}</div>
-              <div className="flex gap-2 mt-2">
+              {Array.isArray(item.tags) && item.tags.length > 0 && (
+                <div className="flex gap-2 flex-wrap mb-3">
+                  {item.tags.map(tag => (
+                    <span key={tag} className="bg-gray-100 dark:bg-gray-700/60 dark:border dark:border-gray-600 rounded-md px-2.5 py-1 text-xs font-medium text-gray-600 dark:text-gray-300">#{tag}</span>
+                  ))}
+                </div>
+              )}
+              <div className="font-bold text-2xl sm:text-3xl text-gray-900 dark:text-white mb-1 tracking-tight">${Number(item.amount).toLocaleString(undefined, { minimumFractionDigits: 2 })}</div>
+              <div className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-4 flex items-center gap-1.5">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" /></svg>
+                {item.category?.name}
+              </div>
+              <div className="flex gap-2 mt-auto pt-2 border-t border-gray-100 dark:border-gray-700">
                 <button
-                  className="bg-yellow-400 text-black px-4 py-2 rounded-xl font-medium shadow hover:bg-yellow-500 transition"
+                  className="flex-1 bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-gray-900 dark:text-gray-900 px-4 py-2.5 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-2"
                   onClick={() => handleEdit(item)}
-                >Edit</button>
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+                  Edit
+                </button>
                 <button
-                  className="bg-red-500 text-black px-4 py-2 rounded-xl font-medium shadow hover:bg-red-600 transition"
+                  className="flex-1 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-4 py-2.5 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-2"
                   onClick={() => onDelete(item.id)}
-                >Delete</button>
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                  Delete
+                </button>
               </div>
             </div>
           ))}
