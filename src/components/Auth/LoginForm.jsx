@@ -1,11 +1,18 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
 export default function LoginForm() {
-  const { login, loading } = useAuth();
+  const { login, loading, accessToken } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
+
+  // Redirect to dashboard if already logged in
+  useEffect(() => {
+    if (accessToken) {
+      navigate('/', { replace: true });
+    }
+  }, [accessToken, navigate]);
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
