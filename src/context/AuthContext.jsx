@@ -1,6 +1,5 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { supabase } from '../utils/supabaseClient';
-import { initializePredefinedCategories } from '../utils/api';
 
 const AuthContext = createContext();
 
@@ -63,21 +62,7 @@ export function AuthProvider({ children }) {
         localStorage.setItem('username', data.user.email.split('@')[0]);
       }
       
-      // Initialize categories on first login (for users who confirmed email)
-      try {
-        const { data: existingCategories } = await supabase
-          .from('categories')
-          .select('id', { count: 'exact', head: true })
-          .eq('user_id', data.user.id);
-        
-        // If user has no categories, initialize them
-        if (!existingCategories || existingCategories.length === 0) {
-          await initializePredefinedCategories(data.user.id, data.session.access_token);
-        }
-      } catch (categoryErr) {
-        console.warn('Could not check/initialize categories on login:', categoryErr);
-        // Don't fail the login if this fails
-      }
+
       
       return data;
     } catch (err) {
@@ -110,15 +95,6 @@ export function AuthProvider({ children }) {
         // Email confirmation disabled - user is logged in immediately
         setSession(data.session);
         setUser(data.user);
-        
-        // Initialize predefined categories for new user with access token
-        try {
-          await initializePredefinedCategories(data.user.id, data.session.access_token);
-          console.log('Categories initialized after registration');
-        } catch (categoryErr) {
-          console.error('Failed to initialize categories during registration:', categoryErr);
-          // Don't fail the registration if categories fail
-        }
         
         // Store username for display
         if (username) {
