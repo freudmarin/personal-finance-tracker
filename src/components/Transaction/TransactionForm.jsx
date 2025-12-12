@@ -81,6 +81,9 @@ export default function TransactionForm({ onSubmit, onCancel, initial }) {
 
 	return (
 		<form onSubmit={submit} className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-xl border border-gray-100 dark:border-gray-700 flex flex-col gap-6">
+			<h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">
+				{initial?.id ? 'Edit Transaction' : 'Add Transaction'}
+			</h2>
 			<div className="flex flex-col gap-6">
 				<div className="flex flex-col gap-2">
 					<label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Title</label>
