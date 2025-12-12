@@ -1,5 +1,38 @@
 import { supabase } from './supabaseClient';
 
+// Predefined categories to populate for new users
+const PREDEFINED_CATEGORIES = [
+  'Food & Dining',
+  'Transportation',
+  'Utilities',
+  'Entertainment',
+  'Healthcare',
+  'Shopping',
+  'Salary',
+  'Investments',
+];
+
+// Create predefined categories for a new user
+export async function initializePredefinedCategories(userId) {
+  try {
+    const categoriesToInsert = PREDEFINED_CATEGORIES.map(name => ({
+      name,
+      user_id: userId,
+    }));
+
+    const { error } = await supabase
+      .from('categories')
+      .insert(categoriesToInsert);
+
+    if (error) {
+      console.error('Error initializing predefined categories:', error);
+      // Don't throw - this shouldn't break the signup flow
+    }
+  } catch (err) {
+    console.error('Failed to initialize predefined categories:', err);
+  }
+}
+
 // Category API with Supabase
 export async function fetchCategories() {
   const { data: { user } } = await supabase.auth.getUser();

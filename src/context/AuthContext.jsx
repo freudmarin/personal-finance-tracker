@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { supabase } from '../utils/supabaseClient';
+import { initializePredefinedCategories } from '../utils/api';
 
 const AuthContext = createContext();
 
@@ -94,6 +95,9 @@ export function AuthProvider({ children }) {
         setSession(data.session);
         setUser(data.user);
         
+        // Initialize predefined categories for new user
+        await initializePredefinedCategories(data.user.id);
+        
         // Store username for display
         if (username) {
           localStorage.setItem('username', username);
@@ -105,6 +109,9 @@ export function AuthProvider({ children }) {
         // Session will be null until they confirm their email
         setUser(null);
         setSession(null);
+        
+        // Initialize predefined categories for new user
+        await initializePredefinedCategories(data.user.id);
         
         // Throw a specific error to let the UI know
         throw new Error('Please check your email to confirm your account before logging in.');
