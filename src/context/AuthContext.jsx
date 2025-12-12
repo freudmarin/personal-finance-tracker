@@ -63,6 +63,22 @@ export function AuthProvider({ children }) {
         localStorage.setItem('username', data.user.email.split('@')[0]);
       }
       
+      // Initialize categories on first login (for users who confirmed email)
+      try {
+        const { data: existingCategories } = await supabase
+          .from('categories')
+          .select('id', { count: 'exact', head: true })
+          .eq('user_id', data.user.id);
+        
+        // If user has no categories, initialize them
+        if (!existingCategories || existingCategories.length === 0) {
+          await initializePredefinedCategories(data.user.id, data.session.access_token);
+        }
+      } catch (categoryErr) {
+        console.warn('Could not check/initialize categories on login:', categoryErr);
+        // Don't fail the login if this fails
+      }
+      
       return data;
     } catch (err) {
       setError(err.message || 'Login failed');
@@ -95,8 +111,14 @@ export function AuthProvider({ children }) {
         setSession(data.session);
         setUser(data.user);
         
-        // Initialize predefined categories for new user
-        await initializePredefinedCategories(data.user.id);
+        // Initialize predefined categories for new user with access token
+        try {
+          await initializePredefinedCategories(data.user.id, data.session.access_token);
+          console.log('Categories initialized after registration');
+        } catch (categoryErr) {
+          console.error('Failed to initialize categories during registration:', categoryErr);
+          // Don't fail the registration if categories fail
+        }
         
         // Store username for display
         if (username) {
@@ -110,8 +132,8 @@ export function AuthProvider({ children }) {
         setUser(null);
         setSession(null);
         
-        // Initialize predefined categories for new user
-        await initializePredefinedCategories(data.user.id);
+        // For email confirmation flow, categories will be initialized on first login
+        console.log('Email confirmation required - categories will be initialized upon first login');
         
         // Throw a specific error to let the UI know
         throw new Error('Please check your email to confirm your account before logging in.');

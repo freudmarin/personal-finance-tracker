@@ -13,23 +13,48 @@ const PREDEFINED_CATEGORIES = [
 ];
 
 // Create predefined categories for a new user
-export async function initializePredefinedCategories(userId) {
+export async function initializePredefinedCategories(userId, accessToken) {
   try {
+    if (!userId) {
+      return;
+    }
+
     const categoriesToInsert = PREDEFINED_CATEGORIES.map(name => ({
       name,
       user_id: userId,
     }));
+    
 
-    const { error } = await supabase
+    // Create a client instance with the user's access token if provided
+    let client = supabase;
+    if (accessToken) {
+      // Ensure the Supabase client has the correct session
+      await supabase.auth.setSession({
+        access_token: accessToken,
+        refresh_token: accessToken,
+        user: { id: userId }
+      });
+    }
+
+    const { data, error } = await client
       .from('categories')
-      .insert(categoriesToInsert);
+      .insert(categoriesToInsert)
+      .select();
 
     if (error) {
-      console.error('Error initializing predefined categories:', error);
-      // Don't throw - this shouldn't break the signup flow
+      console.error('Error details:', {
+        message: error.message,
+        code: error.code,
+        status: error.status,
+        hint: error.hint
+      });
+      throw error;
+    } else {
+      console.log(`Successfully initialized ${data?.length || 0} categories for user ${userId}`, data);
     }
   } catch (err) {
     console.error('Failed to initialize predefined categories:', err);
+    // Don't throw - this shouldn't break the signup flow
   }
 }
 
