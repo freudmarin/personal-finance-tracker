@@ -10,6 +10,7 @@ export function AuthProvider({ children }) {
   const [error, setError] = useState(null);
 
   // Initialize auth state and listen for auth changes
+
   useEffect(() => {
     // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -19,25 +20,37 @@ export function AuthProvider({ children }) {
     });
 
     // Listen for auth state changes
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
       setUser(session?.user ?? null);
       setLoading(false);
-      
       // Store username in localStorage for display (from user metadata)
       if (session?.user?.user_metadata?.username) {
         localStorage.setItem('username', session.user.user_metadata.username);
       } else if (session?.user?.email) {
-        // Fallback to email if no username
         localStorage.setItem('username', session.user.email.split('@')[0]);
       } else {
         localStorage.removeItem('username');
       }
     });
 
-    return () => subscription.unsubscribe();
+    // Cross-tab auth sync: listen for storage events
+    const handleStorage = (event) => {
+      // Supabase uses localStorage key starting with 'sb-' for session
+      if (event.key && event.key.startsWith('sb-')) {
+        supabase.auth.getSession().then(({ data: { session } }) => {
+          setSession(session);
+          setUser(session?.user ?? null);
+          setLoading(false);
+        });
+      }
+    };
+    window.addEventListener('storage', handleStorage);
+
+    return () => {
+      subscription.unsubscribe();
+      window.removeEventListener('storage', handleStorage);
+    };
   }, []);
 
   // Login with Supabase Auth
