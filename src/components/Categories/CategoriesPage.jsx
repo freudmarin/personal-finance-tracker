@@ -2,8 +2,10 @@ import { useEffect, useState } from 'react';
 import { addCategory, updateCategory, deleteCategory, fetchTransactions } from '../../utils/api';
 import Button from '../UI/Button.jsx';
 import Modal from '../UI/Modal.jsx';
+import { useToast } from '../../context/ToastContext';
 
 export default function CategoriesPage({ reloadExpenses, reloadCategories, categories, catError }) {
+  const { addToast } = useToast();
   // categories is now a prop
   const [transactions, setTransactions] = useState([]);
   const [search, setSearch] = useState('');
@@ -48,11 +50,13 @@ export default function CategoriesPage({ reloadExpenses, reloadCategories, categ
         if (reloadExpenses) reloadExpenses();
         setEditName('');
         setShowModal(false);
+        addToast(`Category "${editName.trim()}" created!`, 'success');
       } catch (err) {
         if (err && err.message && (err.message.includes('409') || err.message.toLowerCase().includes('already'))) {
           setModalError('This category already exists.');
         } else {
           setModalError('Failed to add category');
+          addToast('Failed to add category', 'error');
         }
       }
     } else if (modalMode === 'edit' && editing) {
@@ -63,11 +67,13 @@ export default function CategoriesPage({ reloadExpenses, reloadCategories, categ
         setEditing(null);
         setEditName('');
         setShowModal(false);
+        addToast(`Category updated to "${editName.trim()}"`, 'success');
       } catch (err) {
         if (err && err.message && (err.message.includes('409') || err.message.toLowerCase().includes('already'))) {
           setModalError('This category already exists.');
         } else {
           setModalError('Failed to update category');
+          addToast('Failed to update category', 'error');
         }
       }
     }
@@ -83,8 +89,12 @@ export default function CategoriesPage({ reloadExpenses, reloadCategories, categ
       .then(() => {
         if (reloadCategories) reloadCategories();
         if (reloadExpenses) reloadExpenses();
+        addToast('Category deleted', 'info');
       })
-      .catch(() => setError('Failed to delete category'));
+      .catch(() => {
+        setError('Failed to delete category');
+        addToast('Failed to delete category', 'error');
+      });
   }
 
   function confirmDelete() {
@@ -94,8 +104,12 @@ export default function CategoriesPage({ reloadExpenses, reloadCategories, categ
       .then(() => {
         if (reloadCategories) reloadCategories();
         if (reloadExpenses) reloadExpenses();
+        addToast('Category deleted (with transactions)', 'info');
       })
-      .catch(() => setError('Failed to delete category'));
+      .catch(() => {
+        setError('Failed to delete category');
+        addToast('Failed to delete category', 'error');
+      });
   }
 
   function cancelDelete() {
@@ -133,8 +147,8 @@ export default function CategoriesPage({ reloadExpenses, reloadCategories, categ
             >
               <span className="font-semibold text-lg text-gray-800 dark:text-gray-100 group-hover:text-green-600 transition">{cat.name}</span>
               <div className="flex gap-2 mt-4 sm:mt-0">
-                <Button onClick={() => openEditModal(cat.id)} className="bg-yellow-400 text-black px-4 py-2 rounded-xl font-medium shadow hover:bg-yellow-500 transition">Edit</Button>
-                <Button onClick={() => handleDelete(cat.id)} className="bg-red-500 text-black px-4 py-2 rounded-xl font-medium shadow hover:bg-red-600 transition">Delete</Button>
+                <Button onClick={() => openEditModal(cat.id)} className="bg-yellow-400 text-black px-4 py-3 rounded-xl font-medium shadow hover:bg-yellow-500 transition min-h-[48px]">Edit</Button>
+                <Button onClick={() => handleDelete(cat.id)} className="bg-red-500 text-white px-4 py-3 rounded-xl font-medium shadow hover:bg-red-600 transition min-h-[48px]">Delete</Button>
               </div>
             </div>
         ))}

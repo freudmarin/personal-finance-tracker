@@ -4,13 +4,18 @@ import Button from '../UI/Button'
 import { fetchCategories } from '../../utils/api'
 
 export default function TransactionForm({ onSubmit, onCancel, initial }) {
+	// Get today's date in YYYY-MM-DD format
+	const getTodayDate = () => new Date().toISOString().split('T')[0];
+	
 	const [title, setTitle] = useState(initial?.title || '')
 	const [amount, setAmount] = useState(initial?.amount ?? '')
-	const [date, setDate] = useState(initial?.date || '')
+	// Default to today's date for quick entry
+	const [date, setDate] = useState(initial?.date || getTodayDate())
+	// Remember last used category and type for faster repeated entries
 	const [categoryId, setCategoryId] = useState(
-		initial?.categoryId || initial?.category?.id || ''
+		initial?.categoryId || initial?.category?.id || localStorage.getItem('lastUsedCategory') || ''
 	)
-	const [type, setType] = useState(initial?.type || 'expense')
+	const [type, setType] = useState(initial?.type || localStorage.getItem('lastUsedType') || 'expense')
 	const [tags, setTags] = useState(Array.isArray(initial?.tags) ? initial.tags.join(', ') : '')
 	const [categories, setCategories] = useState([])
 	const [errors, setErrors] = useState({})
@@ -76,11 +81,18 @@ export default function TransactionForm({ onSubmit, onCancel, initial }) {
 		setErrors(newErrors)
 		if (Object.keys(newErrors).length > 0) return
 		const tagsList = tags.split(',').map(t => t.trim()).filter(Boolean)
+		
+		// Remember last used category and type for next time
+		if (!initial?.id) { // Only save defaults when adding new transactions
+			localStorage.setItem('lastUsedCategory', categoryId)
+			localStorage.setItem('lastUsedType', type)
+		}
+		
 		onSubmit({ title: title.trim(), amount: Number(amount), date, categoryId, type, tags: tagsList })
 	}
 
 	return (
-		<form onSubmit={submit} className="bg-white dark:bg-gray-800 rounded-2xl p-4 sm:p-6 md:p-8 shadow-xl border border-gray-100 dark:border-gray-700 flex flex-col gap-4 sm:gap-6">
+		<form onSubmit={submit} className="flex flex-col gap-4 sm:gap-6">
 			<h2 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-white mb-2">
 				{initial?.id ? 'Edit Transaction' : 'Add Transaction'}
 			</h2>

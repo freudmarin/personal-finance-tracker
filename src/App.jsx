@@ -11,6 +11,7 @@ import LoginForm from './components/Auth/LoginForm.jsx';
 import RegisterForm from './components/Auth/RegisterForm.jsx';
 import { fetchTransactions, addTransaction as apiAddTransaction, updateTransaction as apiUpdateTransaction, deleteTransaction as apiDeleteTransaction, fetchCategories } from './utils/api';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { ToastProvider, useToast } from './context/ToastContext';
 
 
 function PrivateRoute({ children }) {
@@ -50,6 +51,7 @@ function AuthGlobalUI() {
 
 function AppContent() {
   const { accessToken, loading: authLoading } = useAuth();
+  const { addToast } = useToast();
   const [transactions, setTransactions] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -112,21 +114,30 @@ function AppContent() {
     try {
       const newItem = await apiAddTransaction(item)
       setTransactions(prev => [newItem, ...prev])
-    } catch (e) {}
+      addToast('Transaction added successfully!', 'success')
+    } catch (e) {
+      addToast('Failed to add transaction', 'error')
+    }
   }
 
   async function updateTransaction(id, updated) {
     try {
       const newItem = await apiUpdateTransaction(id, updated)
       setTransactions(prev => prev.map(e => e.id === id ? newItem : e))
-    } catch (e) {}
+      addToast('Transaction updated successfully!', 'success')
+    } catch (e) {
+      addToast('Failed to update transaction', 'error')
+    }
   }
 
   async function deleteTransaction(id) {
     try {
       await apiDeleteTransaction(id)
       setTransactions(prev => prev.filter(e => e.id !== id))
-    } catch (e) {}
+      addToast('Transaction deleted', 'info')
+    } catch (e) {
+      addToast('Failed to delete transaction', 'error')
+    }
   }
 
   
@@ -239,7 +250,9 @@ useEffect(() => {
 export default function App() {
   return (
     <AuthProvider>
-      <AppContent />
+      <ToastProvider>
+        <AppContent />
+      </ToastProvider>
     </AuthProvider>
   );
 }
