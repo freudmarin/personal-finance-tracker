@@ -115,6 +115,7 @@ export default function LandingPage() {
                       borderRadius: '0.5rem',
                       color: 'white'
                     }}
+                    itemSorter={(item) => item.dataKey === 'income' ? -1 : 1}
                   />
                   <Bar dataKey="income" fill="#10b981" name="income" radius={[8, 8, 0, 0]} />
                   <Bar dataKey="expense" fill="#ef4444" name="expense" radius={[8, 8, 0, 0]} />
