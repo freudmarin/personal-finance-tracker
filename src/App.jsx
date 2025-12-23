@@ -31,71 +31,55 @@ function PrivateRoute({ children }) {
 function AuthGlobalUI() {
   const { error: authError, loading: authLoading } = useAuth();
   const { t, i18n } = useTranslation();
-  
-  // Update meta tags when language changes
+
   useEffect(() => {
-    // Update document title
     document.title = t('meta.title');
-    
-    // Update Open Graph meta tags
-    const ogTitle = document.querySelector('meta[property="og:title"]');
-    if (ogTitle) ogTitle.setAttribute('content', t('meta.title'));
-    
-    const ogDescription = document.querySelector('meta[property="og:description"]');
-    if (ogDescription) ogDescription.setAttribute('content', t('meta.description'));
-    
-    // Update Twitter Card meta tags
-    const twitterTitle = document.querySelector('meta[name="twitter:title"]');
-    if (twitterTitle) twitterTitle.setAttribute('content', t('meta.title'));
-    
-    const twitterDescription = document.querySelector('meta[name="twitter:description"]');
-    if (twitterDescription) twitterDescription.setAttribute('content', t('meta.description'));
   }, [i18n.language, t]);
-  
+
   // Map auth error to translation key based on actual Supabase error messages
   const getErrorMessage = (error) => {
     if (!error) return '';
     const errorLower = error.toLowerCase();
-    
+
     // Invalid login credentials
     if (errorLower.includes('invalid') && errorLower.includes('credentials')) {
       return t('auth.invalidCredentials');
     }
-    
+
     // Email already registered
     if (errorLower.includes('already registered')) {
       return t('auth.registrationError');
     }
-    
+
     // Weak password
     if (errorLower.includes('password') && errorLower.includes('character')) {
       return t('auth.weakPassword');
     }
-    
+
     // User not found
     if (errorLower.includes('user not found')) {
       return t('auth.userNotFound');
     }
-    
+
     // Rate limiting
     if (errorLower.includes('rate limit') || errorLower.includes('too many')) {
       return t('auth.tooManyRequests');
     }
-    
+
     // Network errors
     if (errorLower.includes('network') || errorLower.includes('fetch')) {
       return t('auth.networkError');
     }
-    
+
     // Email confirmation required
     if (errorLower.includes('check your email')) {
       return t('auth.registrationSuccess');
     }
-    
+
     // Fallback: show generic error
     return t('auth.genericError');
   };
-  
+
   return (
     <>
       {/* Global error banner */}
@@ -135,11 +119,11 @@ function AppContent() {
   const totalIncome = useMemo(() => transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + (t.base_amount || t.amount || 0), 0), [transactions])
   const totalExpense = useMemo(() => transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + (t.base_amount || t.amount || 0), 0), [transactions])
   const net = totalIncome - totalExpense
-  
+
   // Check if there are mixed currencies
   const currencies = new Set(transactions.map(t => t.currency_code || t.currencyCode || 'EUR'));
   const hasMixedCurrencies = currencies.size > 1;
-  
+
   const [showGreeting, setShowGreeting] = useState(false);
   const username = localStorage.getItem('username');
   // Load transactions from backend or localStorage
@@ -174,7 +158,7 @@ function AppContent() {
   useEffect(() => {
     // Wait for auth to initialize before fetching data
     if (authLoading) return;
-    
+
     if (accessToken) {
       reloadTransactions()
       reloadCategories()
@@ -216,8 +200,8 @@ function AppContent() {
     }
   }
 
-  
-useEffect(() => {
+
+  useEffect(() => {
     if (username) {
       setShowGreeting(true);
       const timer = setTimeout(() => setShowGreeting(false), 3500);
@@ -280,7 +264,7 @@ useEffect(() => {
                       <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">{t('currency.baseCurrency')}</p>
                     </div>
                   </div>
-                  
+
                   {/* Mixed currency indicator */}
                   {hasMixedCurrencies && (
                     <div className="mb-6 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg flex items-center gap-2 text-sm text-blue-800 dark:text-blue-200">
@@ -290,7 +274,7 @@ useEffect(() => {
                       <span>{t('currency.mixedCurrencies')}</span>
                     </div>
                   )}
-                  
+
                   {/* Combined Monthly Chart */}
                   <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-4 sm:p-6 border border-gray-100 dark:border-gray-700 mb-6">
                     <h3 className="text-base sm:text-lg font-bold mb-3 sm:mb-4 text-gray-800 dark:text-white flex items-center gap-2">
@@ -301,7 +285,7 @@ useEffect(() => {
                     </h3>
                     <CombinedMonthChart transactions={transactions} />
                   </div>
-                  
+
                   {/* Two-column layout for income/expense breakdowns */}
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-6">
                     {/* Income Section */}
@@ -312,7 +296,7 @@ useEffect(() => {
                       </h3>
                       <CategoryPieChart transactions={transactions} type="income" />
                     </div>
-                    
+
                     {/* Expense Section */}
                     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-4 sm:p-6 border border-red-100 dark:border-gray-700">
                       <h3 className="text-base sm:text-lg font-bold mb-3 sm:mb-4 text-red-700 dark:text-red-400 flex items-center gap-2">
@@ -322,7 +306,7 @@ useEffect(() => {
                       <CategoryPieChart transactions={transactions} type="expense" />
                     </div>
                   </div>
-                  
+
                   {/* Page-level error (non-auth) */}
                   {error && <div className="mb-4 sm:mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl text-red-700 dark:text-red-400 font-medium">{error}</div>}
                   {loading ? (

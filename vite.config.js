@@ -6,4 +6,13 @@ export default defineConfig({
   css: {
     postcss: true,
   },
+  build: {
+    rollupOptions: {
+      input: {
+        main: 'index.html',
+        en: 'en.html',
+        sq: 'sq.html',
+      },
+    },
+  },
 })
