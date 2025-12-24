@@ -6,6 +6,7 @@ import CatchAllRedirect from './components/CatchAllRedirect.jsx';
 import CombinedMonthChart from './components/Transactions/CombinedMonthChart.jsx';
 import CategoryPieChart from './components/Transactions/CategoryPieChart.jsx';
 import Header from './components/Header.jsx';
+import Footer from './components/Footer.jsx';
 import useDarkMode from './hooks/useDarkMode.js';
 import CategoriesPage from './components/Categories/CategoriesPage.jsx';
 import LoginForm from './components/Auth/LoginForm.jsx';
@@ -213,8 +214,9 @@ function AppContent() {
     <Router>
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-900 transition-colors duration-300">
         <AuthGlobalUI />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col min-h-[calc(100vh-3rem)]">
           <Header isDark={isDark} toggleDark={() => setIsDark(d => !d)} />
+          <main className="flex-1 mt-4">
           <Routes>
             <Route path="/login" element={accessToken ? <Navigate to="/dashboard" replace /> : <LoginForm />} />
             <Route path="/register" element={accessToken ? <Navigate to="/dashboard" replace /> : <RegisterForm />} />
@@ -333,6 +335,8 @@ function AppContent() {
             {/* Catch-all route: redirect to login if not authenticated, else to home */}
             <Route path="*" element={<CatchAllRedirect />} />
           </Routes>
+          </main>
+          <Footer />
         </div>
       </div>
     </Router>

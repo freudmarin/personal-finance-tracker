@@ -238,5 +238,8 @@
     "Shopping": "Blerje",
     "Transportation": "Transport",
     "Utilities": "Shërbime"
+  },
+  "footer": {
+    "rights": "Të gjitha të drejtat e rezervuara."
   }
 }

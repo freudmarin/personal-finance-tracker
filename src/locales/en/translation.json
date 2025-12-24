@@ -238,5 +238,8 @@
     "Shopping": "Shopping",
     "Transportation": "Transportation",
     "Utilities": "Utilities"
+  },
+  "footer": {
+    "rights": "All rights reserved."
   }
 }
