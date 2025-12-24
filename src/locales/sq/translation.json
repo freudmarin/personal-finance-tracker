@@ -1,4 +1,8 @@
 {
+  "languages": {
+    "english": "Anglisht",
+    "albanian": "Shqip"
+  },  
   "app": {
     "name": "Gjurmues i Financave Personale",
     "shortName": "Financat"

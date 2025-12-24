@@ -1,4 +1,8 @@
 {
+  "languages": {
+    "english": "English",
+    "albanian": "Albanian"
+  },
   "app": {
     "name": "Personal Finance Tracker",
     "shortName": "Finances"
