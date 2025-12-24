@@ -105,7 +105,7 @@ export function AuthProvider({ children }) {
   }, []);
 
   // Register with Supabase Auth
-  const register = useCallback(async (email, username, password) => {
+  const register = useCallback(async (email, username, password, language = 'en') => {
     setLoading(true);
     setError(null);
     try {
@@ -115,6 +115,7 @@ export function AuthProvider({ children }) {
         options: {
           data: {
             username: username,
+            language: language, // Store user's preferred language for email templates
           },
         },
       });

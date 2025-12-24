@@ -90,6 +90,7 @@
     "email": "Email",
     "password": "Fjalëkalimi",
     "username": "Emri i përdoruesit",
+    "preferredLanguage": "Gjuha e Preferuar",
     "confirmPassword": "Konfirmo Fjalëkalimin",
     "loginTitle": "Mirë se vini përsëri",
     "registerTitle": "Krijo një llogari të re",
@@ -119,7 +120,10 @@
     "userNotFound": "Përdoruesi nuk u gjet",
     "tooManyRequests": "Shumë kërkesa. Ju lutem provoni përsëri më vonë.",
     "networkError": "Gabim në rrjet. Kontrolloni lidhjen tuaj të internetit.",
-    "genericError": "Ndodhi një gabim. Ju lutem provoni përsëri."
+    "genericError": "Ndodhi një gabim. Ju lutem provoni përsëri.",
+    "emailConfirmedTitle": "Emaili u Konfirmua!",
+    "emailConfirmedDescription": "Adresa juaj e emailit u verifikua me sukses. Tani mund të identifikoheni në llogarinë tuaj.",
+    "redirectingToLogin": "Po ridrejtohet në faqen e identifikimit..."
   },
   "messages": {
     "loginRequired": "Ju lutem identifikohuni për të vazhduar",

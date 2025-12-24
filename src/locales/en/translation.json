@@ -90,6 +90,7 @@
     "email": "Email",
     "password": "Password",
     "username": "Username",
+    "preferredLanguage": "Preferred Language",
     "confirmPassword": "Confirm Password",
     "loginTitle": "Welcome back",
     "registerTitle": "Create a new account",
@@ -119,7 +120,10 @@
     "userNotFound": "User not found",
     "tooManyRequests": "Too many requests. Please try again later.",
     "networkError": "Network error. Please check your internet connection.",
-    "genericError": "An error occurred. Please try again."
+    "genericError": "An error occurred. Please try again.",
+    "emailConfirmedTitle": "Email Confirmed!",
+    "emailConfirmedDescription": "Your email address has been successfully verified. You can now log in to your account.",
+    "redirectingToLogin": "Redirecting to login page..."
   },
   "messages": {
     "loginRequired": "Please log in to continue",

@@ -8,6 +8,7 @@ export default function RegisterForm() {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
+  const [language, setLanguage] = useState(i18n.language || 'en');
 
   // Redirect to dashboard if already logged in
   useEffect(() => {
@@ -65,7 +66,7 @@ export default function RegisterForm() {
     setSuccessMessage('');
     if (!validate()) return;
     try {
-      const result = await register(email, username, password);
+      const result = await register(email, username, password, language);
       
       // Check if email confirmation is required
       if (result.session) {
@@ -78,6 +79,7 @@ export default function RegisterForm() {
       }
     } catch (err) {
       // Check if this is the email confirmation message (expected flow, not an error)
+      console.error('Signup error from Supabase:', err?.message);
       const errorMsg = err?.message || '';
       if (errorMsg.toLowerCase().includes('check your email') || errorMsg.toLowerCase().includes('confirm')) {
         // This is the expected email confirmation flow - show success message then redirect
@@ -140,6 +142,18 @@ export default function RegisterForm() {
               className={`w-full border-2 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 transition-all shadow-sm ${usernameError ? 'border-red-500 dark:border-red-400' : 'border-gray-200 dark:border-gray-600'}`}
             />
             {usernameError && <span className="text-red-500 text-xs mt-1.5 block font-medium">{t(usernameError)}</span>}
+          </div>
+
+          <div>
+            <label className="block font-semibold text-gray-700 dark:text-gray-200 mb-2 text-sm">{t('auth.preferredLanguage')}</label>
+            <select
+              value={language}
+              onChange={e => setLanguage(e.target.value)}
+              className="w-full border-2 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 transition-all shadow-sm border-gray-200 dark:border-gray-600"
+            >
+              <option value="en">English</option>
+              <option value="sq">Shqip (Albanian)</option>
+            </select>
           </div>
 
           <div>
